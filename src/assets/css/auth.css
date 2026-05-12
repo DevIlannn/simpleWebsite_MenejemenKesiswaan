@@ -43,7 +43,7 @@ html, body {
   max-height: 680px;
   border-radius: var(--radius) 0 0 var(--radius);
   overflow: hidden;
-  background: url('https://images.unsplash.com/photo-1588072432836-e10032774350?w=900&q=85') center/cover no-repeat;
+  background: url('/assets/image/background-default.jpg') center/cover no-repeat;
 }
 
 .panel-left__overlay {

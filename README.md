@@ -24,8 +24,8 @@ MenejemenKesiswaan/
         │   └── profile.css
         └── image/
             ├── logo.png
-            ├── banner.jpg
-            └── avatar-default.png
+            ├── banner.png
+            └── background-default.jpg
 ```
 
 Struktur project ini bekerja dengan membagi sistem menjadi dua bagian utama, yaitu server-side dan client-side. File `app.js` berfungsi sebagai pusat backend yang menjalankan server Node.js dan mengatur routing, API, serta pengiriman halaman ke browser. Ketika pengguna membuka aplikasi, server akan menampilkan file HTML dari folder `public` seperti `index.html`, `auth.html`, atau `profile.html`. Folder public digunakan untuk halaman utama yang langsung diakses pengguna melalui browser.
@@ -163,8 +163,6 @@ app.delete("/api/data/admin/:id", async (req, res) => {
 });
 ```
 
-***
-
 startServer() digunakan sebagai sistem startup utama aplikasi untuk menjalankan inisialisasi database sebelum server aktif.
 
 ```app.js
@@ -178,3 +176,47 @@ async function startServer() {
 
 startServer();
 ```
+
+***
+
+```Flow Sistem
+User buka browser
+      ↓
+Express (app.js) terima request
+      ↓
+Kirim halaman HTML ke browser
+      ↓
+JS di browser fetch ke REST API
+      ↓
+API query ke PostgreSQL (Neon Cloud)
+      ↓
+Mengembalikan response berupa data
+      ↓
+Ditampilkan di UI browser
+```
+
+How to use? penggunaan sangat mudah, Pastikan developer sudah menginstall tools berupa [Nodejs](https://nodejs.org/en/download), dan sudah login ke akun [Neon.tech](https://neon.com/)
+
+```bash
+# Clone repository dan masuk ke folder project
+git clone https://github.com/DevIlannn/simpleWebsite_MenejemenKesiswaan.git
+cd simpleWebsite_MenejemenKesiswaan
+
+# Install dependencies
+npm install
+
+# Setup environment
+cp .env.example .env        # Mac/Linux
+copy .env.example .env      # Windows
+```
+
+Masuk ke environment dan ganti `DATABASE_URL` dengan koneksi database neon milik sendiri. lalu jalankan aplikasi 
+
+```bash
+# start server nodejs
+node app.js
+
+click http://localhost:3000
+```
+
+
