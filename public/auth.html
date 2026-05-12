@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login — Manajemen Kesiswaan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=key_vertical" />
+<link rel="stylesheet" href="/assets/css/auth.css">
+</head>
+<body>
+<div class="auth-wrapper">
+
+  <div class="panel-left">
+    <div class="panel-left__overlay"></div>
+    <div class="panel-left__content">
+      <div class="panel-left__text">
+        <p class="panel-left__label">Selamat Datang</p>
+        <h1 class="panel-left__title">Sistem Manajemen<br>Data Siswa</h1>
+        <p class="panel-left__desc">Platform digital untuk pengelolaan administrasi kesiswaan secara terpusat, aman, dan efisien.</p>
+      </div>
+      <div class="panel-left__stats">
+        <div class="stat">
+          <span class="stat__num">Aktif</span>
+          <span class="stat__lbl">Status Sistem</span>
+        </div>
+        <div class="stat__divider"></div>
+        <div class="stat">
+          <span class="stat__num">Aman</span>
+          <span class="stat__lbl">Keamanan Data</span>
+        </div>
+        <div class="stat__divider"></div>
+        <div class="stat">
+          <span class="stat__num">24/7</span>
+          <span class="stat__lbl">Akses Sistem</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel-right">
+    <div class="form-container">
+
+      <div class="form-header">
+        <h2 class="form-title">Masuk</h2>
+        <p class="form-subtitle">Pilih akses sesuai peran Anda</p>
+      </div>
+
+      <div class="role-toggle" role="tablist" aria-label="Pilih peran">
+        <button class="role-btn active" data-role="admin" onclick="switchRole('admin')" role="tab" aria-selected="true">
+          <span class="material-symbols-rounded">shield_person</span>
+          Admin
+        </button>
+        <button class="role-btn" data-role="siswa" onclick="switchRole('siswa')" role="tab" aria-selected="false">
+          <span class="material-symbols-rounded">school</span>
+          Siswa
+        </button>
+        <span class="role-indicator" aria-hidden="true"></span>
+      </div>
+
+      <form id="auth-form" onsubmit="handleLogin(event)" novalidate>
+
+        <div id="form-admin" class="form-fields">
+          <div class="field-group">
+            <label class="field-label" for="admin-username">Username</label>
+            <div class="field-input-wrap">
+              <span class="material-symbols-rounded field-icon">person</span>
+              <input type="text" id="admin-username" class="field-input" placeholder="Masukkan username" autocomplete="username">
+            </div>
+            <span class="field-error" id="err-username"></span>
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="admin-password">Password</label>
+            <div class="field-input-wrap">
+              <span class="material-symbols-rounded field-icon">lock</span>
+              <input type="password" id="admin-password" class="field-input" placeholder="Masukkan password" autocomplete="current-password">
+              <button type="button" class="toggle-pw" onclick="togglePassword('admin-password', this)" tabindex="-1" aria-label="Tampilkan password">
+                <span class="material-symbols-rounded">visibility</span>
+              </button>
+            </div>
+            <span class="field-error" id="err-password"></span>
+          </div>
+        </div>
+
+        <div id="form-siswa" class="form-fields hidden">
+          <div class="field-group">
+            <label class="field-label" for="siswa-nama">Nama Lengkap</label>
+            <div class="field-input-wrap">
+              <span class="material-symbols-rounded field-icon">badge</span>
+              <input type="text" id="siswa-nama" class="field-input" placeholder="Masukkan nama lengkap">
+            </div>
+            <span class="field-error" id="err-nama"></span>
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="siswa-nisn">NISN</label>
+            <div class="field-input-wrap">
+              <span class="material-symbols-outlined field-icon   ">key_vertical</span>
+              <input type="text" id="siswa-nisn" class="field-input" placeholder="Masukkan NISN" maxlength="20">
+            </div>
+            <span class="field-error" id="err-nisn"></span>
+          </div>
+        </div>
+
+        <div id="form-alert" class="form-alert hidden">
+          <span class="material-symbols-rounded">error</span>
+          <span id="alert-msg"></span>
+        </div>
+
+        <button type="submit" class="btn-submit" id="btn-submit">
+          <span class="btn-text">Masuk</span>
+          <span class="btn-loader hidden"><span class="material-symbols-rounded spin">progress_activity</span></span>
+        </button>
+
+      </form>
+
+      <div class="form-footer">
+        <hr class="footer-hr">
+        <p class="footer-credit">powered by devilann</p>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<div class="modal-overlay hidden" id="error-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal-box">
+    <div class="modal-icon-wrap">
+      <span class="material-symbols-rounded modal-icon">lock_person</span>
+    </div>
+    <div class="modal-body">
+      <h3 class="modal-title" id="modal-title">Akses Ditolak</h3>
+      <p class="modal-msg" id="modal-msg">Username atau password yang Anda masukkan salah.</p>
+    </div>
+    <button class="modal-close" id="modal-close-btn" onclick="closeModal()" aria-label="Tutup">
+      <span class="material-symbols-rounded">close</span>
+    </button>
+  </div>
+</div>
+
+<script src="/assets/js/auth.js"></script>
+</body>
+</html>

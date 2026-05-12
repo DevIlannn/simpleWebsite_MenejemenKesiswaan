@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sistem Manajemen Kesiswaan - Dashboard Administrasi">
+    <title>Manajemen Kesiswaan</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <div class="brand-mark">
+                <i class="fa-solid fa-graduation-cap"></i>
+            </div>
+            <div class="brand-text">
+                <span class="brand-name">Menejemen</span>
+                <span class="brand-sub">Kesiswaan</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <span class="nav-label">Menu Utama</span>
+            <a href="#" class="nav-item active" data-page="dashboard">
+                <i class="fa-solid fa-chart-pie"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="#" class="nav-item" data-page="siswa">
+                <i class="fa-solid fa-users"></i>
+                <span>Data Siswa</span>
+            </a>
+            <a href="#" class="nav-item" data-page="admin">
+                <i class="fa-solid fa-user-shield"></i>
+                <span>Data Admin</span>
+            </a>
+
+            <span class="nav-label" style="margin-top: 16px;">Sistem</span>
+            <a href="#" class="nav-item" data-page="logs">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+                <span>Activity Logs</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="admin-info">
+                <div class="admin-avatar">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+                <div class="admin-meta">
+                    <span class="admin-name" id="adminName">Administrator</span>
+                    <span class="admin-role">Super Admin</span>
+                </div>
+            </div>
+            <button class="btn-logout" title="Keluar" onclick="sessionStorage.removeItem('auth_role');sessionStorage.removeItem('auth_user');window.location.replace('/auth');">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+            </button>
+        </div>
+    </aside>
+
+    <div class="main-wrapper">
+        <header class="topbar">
+            <div class="topbar-left">
+                <div class="page-title" id="pageTitle">
+                    <span>Dashboard</span>
+                    <i class="fa-solid fa-chevron-right"></i>
+                    <span class="page-sub" id="pageSub">Overview</span>
+                </div>
+            </div>
+            <div class="topbar-right">
+                <div class="topbar-date" id="topbarDate"></div>
+                <button class="topbar-notif" title="Notifikasi">
+                    <i class="fa-solid fa-bell"></i>
+                    <span class="notif-badge" id="notifBadge">0</span>
+                </button>
+            </div>
+        </header>
+
+        <main class="content-area">
+
+            <section class="page" id="page-dashboard">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon stat-icon--blue">
+                            <i class="fa-solid fa-users"></i>
+                        </div>
+                        <div class="stat-body">
+                            <span class="stat-label">Total Siswa</span>
+                            <span class="stat-value" id="stat-total">0</span>
+                        </div>
+                        <div class="stat-trend">
+                            <i class="fa-solid fa-arrow-up"></i>
+                            <span id="stat-total-pct">0%</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon stat-icon--green">
+                            <i class="fa-solid fa-circle-check"></i>
+                        </div>
+                        <div class="stat-body">
+                            <span class="stat-label">Siswa Aktif</span>
+                            <span class="stat-value" id="stat-aktif">0</span>
+                        </div>
+                        <div class="stat-trend stat-trend--success">
+                            <i class="fa-solid fa-arrow-up"></i>
+                            <span id="stat-aktif-pct">0%</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon stat-icon--red">
+                            <i class="fa-solid fa-circle-xmark"></i>
+                        </div>
+                        <div class="stat-body">
+                            <span class="stat-label">Tidak Aktif</span>
+                            <span class="stat-value" id="stat-nonaktif">0</span>
+                        </div>
+                        <div class="stat-trend stat-trend--error">
+                            <i class="fa-solid fa-arrow-down"></i>
+                            <span id="stat-nonaktif-pct">0%</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon stat-icon--navy">
+                            <i class="fa-solid fa-chalkboard"></i>
+                        </div>
+                        <div class="stat-body">
+                            <span class="stat-label">Total Kelas</span>
+                            <span class="stat-value" id="stat-kelas">0</span>
+                        </div>
+                        <div class="stat-trend">
+                            <i class="fa-solid fa-minus"></i>
+                            <span>Stabil</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon stat-icon--slate">
+                            <i class="fa-solid fa-code-branch"></i>
+                        </div>
+                        <div class="stat-body">
+                            <span class="stat-label">Total Jurusan</span>
+                            <span class="stat-value" id="stat-jurusan">0</span>
+                        </div>
+                        <div class="stat-trend">
+                            <i class="fa-solid fa-minus"></i>
+                            <span>Stabil</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-row">
+                    <div class="chart-card chart-card--wide">
+                        <div class="chart-header">
+                            <div>
+                                <h3 class="chart-title">Distribusi Siswa per Kelas</h3>
+                                <p class="chart-sub">Jumlah siswa berdasarkan tingkat kelas</p>
+                            </div>
+                        </div>
+                        <div class="chart-body">
+                            <canvas id="chartKelas"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <div>
+                                <h3 class="chart-title">Status Siswa</h3>
+                                <p class="chart-sub">Proporsi berdasarkan status</p>
+                            </div>
+                        </div>
+                        <div class="chart-body chart-body--donut">
+                            <canvas id="chartStatus"></canvas>
+                            <div class="donut-legend" id="donutLegend"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-card">
+                    <div class="table-header">
+                        <div>
+                            <h3 class="table-title">Siswa Terbaru</h3>
+                            <p class="table-sub">5 siswa terakhir ditambahkan</p>
+                        </div>
+                        <button class="btn btn--outline btn--sm" onclick="navigateTo('siswa')">
+                            Lihat Semua <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                    <div class="table-wrap">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>NISN</th>
+                                    <th>Nama Lengkap</th>
+                                    <th>Kelas</th>
+                                    <th>Jurusan</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recentSiswaBody">
+                                <tr>
+                                    <td colspan="5" class="table-empty">
+                                        <i class="fa-solid fa-spinner fa-spin"></i> Memuat data...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section class="page hidden" id="page-siswa">
+                <div class="page-toolbar">
+                    <div class="toolbar-left">
+                        <div class="search-box">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" id="searchSiswa" placeholder="Cari nama siswa..." autocomplete="off">
+                        </div>
+                        <select class="select-filter" id="filterKelas">
+                            <option value="">Semua Kelas</option>
+                        </select>
+                        <select class="select-filter" id="filterJurusan">
+                            <option value="">Semua Jurusan</option>
+                        </select>
+                        <select class="select-filter" id="filterStatus">
+                            <option value="">Semua Status</option>
+                            <option value="aktif">Aktif</option>
+                            <option value="pindah">Pindah</option>
+                            <option value="lulus">Lulus</option>
+                            <option value="nonaktif">Nonaktif</option>
+                        </select>
+                    </div>
+                    <div class="toolbar-right">
+                        <div class="export-group">
+                            <button class="btn btn--outline btn--sm" id="exportSiswaExcel">
+                                <i class="fa-solid fa-file-excel"></i> Excel
+                            </button>
+                            <button class="btn btn--outline btn--sm" id="exportSiswaPdf">
+                                <i class="fa-solid fa-file-pdf"></i> PDF
+                            </button>
+                        </div>
+                        <button class="btn btn--primary" id="btnTambahSiswa">
+                            <i class="fa-solid fa-plus"></i> Tambah Siswa
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-card">
+                    <div class="table-header">
+                        <div>
+                            <h3 class="table-title">Data Siswa</h3>
+                            <p class="table-sub"><span id="siswaCount">0</span> siswa ditemukan</p>
+                        </div>
+                    </div>
+                    <div class="table-wrap">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th style="width:48px;">No</th>
+                                    <th>NISN</th>
+                                    <th>Nama Lengkap</th>
+                                    <th>Gender</th>
+                                    <th>Kelas</th>
+                                    <th>Jurusan</th>
+                                    <th>No. Telepon</th>
+                                    <th>Status</th>
+                                    <th style="width:120px;">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="siswaTableBody">
+                                <tr>
+                                    <td colspan="9" class="table-empty">
+                                        <i class="fa-solid fa-spinner fa-spin"></i> Memuat data...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section class="page hidden" id="page-admin">
+                <div class="page-toolbar">
+                    <div class="toolbar-left">
+                        <div class="search-box">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" id="searchAdmin" placeholder="Cari username admin..." autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="toolbar-right">
+                        <div class="export-group">
+                            <button class="btn btn--outline btn--sm" id="exportAdminExcel">
+                                <i class="fa-solid fa-file-excel"></i> Excel
+                            </button>
+                            <button class="btn btn--outline btn--sm" id="exportAdminPdf">
+                                <i class="fa-solid fa-file-pdf"></i> PDF
+                            </button>
+                        </div>
+                        <button class="btn btn--primary" id="btnTambahAdmin">
+                            <i class="fa-solid fa-plus"></i> Tambah Admin
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-card">
+                    <div class="table-header">
+                        <div>
+                            <h3 class="table-title">Data Administrator</h3>
+                            <p class="table-sub"><span id="adminCount">0</span> admin terdaftar</p>
+                        </div>
+                    </div>
+                    <div class="table-wrap">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th style="width:48px;">No</th>
+                                    <th>Username</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>Dibuat</th>
+                                    <th>Diperbarui</th>
+                                    <th style="width:120px;">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminTableBody">
+                                <tr>
+                                    <td colspan="7" class="table-empty">
+                                        <i class="fa-solid fa-spinner fa-spin"></i> Memuat data...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section class="page hidden" id="page-logs">
+                <div class="page-toolbar">
+                    <div class="toolbar-left">
+                        <div class="search-box">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" id="searchLogs" placeholder="Cari aktivitas..." autocomplete="off">
+                        </div>
+                        <select class="select-filter" id="filterLogsType">
+                            <option value="">Semua Tipe</option>
+                            <option value="CREATE">Create</option>
+                            <option value="UPDATE">Update</option>
+                            <option value="DELETE">Delete</option>
+                            <option value="LOGIN">Login</option>
+                            <option value="EXPORT">Export</option>
+                        </select>
+                    </div>
+                    <div class="toolbar-right">
+                        <button class="btn btn--outline btn--sm" id="exportLogsExcel">
+                            <i class="fa-solid fa-file-excel"></i> Export Logs
+                        </button>
+                        <button class="btn btn--danger btn--sm" id="clearLogs">
+                            <i class="fa-solid fa-trash"></i> Hapus Semua
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-card">
+                    <div class="table-header">
+                        <div>
+                            <h3 class="table-title">Activity Logs</h3>
+                            <p class="table-sub"><span id="logsCount">0</span> aktivitas tercatat</p>
+                        </div>
+                    </div>
+                    <div class="table-wrap">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th style="width:48px;">No</th>
+                                    <th style="width:160px;">Waktu</th>
+                                    <th style="width:100px;">Tipe</th>
+                                    <th>Modul</th>
+                                    <th>Keterangan</th>
+                                    <th>Aktor</th>
+                                </tr>
+                            </thead>
+                            <tbody id="logsTableBody">
+                                <tr>
+                                    <td colspan="6" class="table-empty">Belum ada aktivitas tercatat.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <div class="modal-overlay hidden" id="modalOverlay">
+        <div class="modal" id="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Form</h3>
+                <button class="modal-close" id="modalClose">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+            <div class="modal-footer">
+                <button class="btn btn--ghost" id="modalCancel">Batal</button>
+                <button class="btn btn--primary" id="modalSubmit">Simpan</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="confirm-overlay hidden" id="confirmOverlay">
+        <div class="confirm-box">
+            <div class="confirm-icon">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <h4 class="confirm-title" id="confirmTitle">Konfirmasi Hapus</h4>
+            <p class="confirm-msg" id="confirmMsg">Data ini akan dihapus permanen.</p>
+            <div class="confirm-actions">
+                <button class="btn btn--ghost" id="confirmCancel">Batal</button>
+                <button class="btn btn--danger" id="confirmOk">Ya, Hapus</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="/assets/js/index.js"></script>
+</body>
+</html>
