@@ -56,7 +56,6 @@ async function initTables() {
     console.log("[DB] Tables initialized successfully");
   } catch (err) {
     console.error("[DB] Table initialization failed:", err.message);
-    process.exit(1);
   }
 }
 
@@ -154,10 +153,10 @@ app.get("/api/data/siswa", async (req, res) => {
   const params = [];
   let i = 1;
 
-  if (kelas)   { query += ` AND kelas = $${i++}`;                     params.push(kelas); }
-  if (jurusan) { query += ` AND jurusan = $${i++}`;                   params.push(jurusan); }
-  if (status)  { query += ` AND status = $${i++}`;                    params.push(status); }
-  if (search)  { query += ` AND nama_lengkap ILIKE $${i++}`;          params.push(`%${search}%`); }
+  if (kelas)   { query += ` AND kelas = $${i++}`;            params.push(kelas); }
+  if (jurusan) { query += ` AND jurusan = $${i++}`;          params.push(jurusan); }
+  if (status)  { query += ` AND status = $${i++}`;           params.push(status); }
+  if (search)  { query += ` AND nama_lengkap ILIKE $${i++}`; params.push(`%${search}%`); }
 
   query += " ORDER BY created_at DESC";
 
@@ -296,12 +295,18 @@ app.use((req, res) => {
   res.status(404).json({ success: false, message: "Route tidak ditemukan" });
 });
 
-async function startServer() {
-  await initTables();
+const isVercel = process.env.VERCEL === "1";
 
-  app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+if (!isVercel) {
+  initTables().then(() => {
+    app.listen(PORT, () => {
+      console.log(`Server running on http://localhost:${PORT}`);
+    });
+  });
+} else {
+  initTables().catch((err) => {
+    console.error("[DB] Init error on Vercel:", err.message);
   });
 }
 
-startServer();
+export default app;

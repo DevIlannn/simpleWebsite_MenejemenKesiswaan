@@ -210,7 +210,7 @@ cp .env.example .env        # Mac/Linux
 copy .env.example .env      # Windows
 ```
 
-Masuk ke environment dan ganti `DATABASE_URL` dengan koneksi database neon milik sendiri. lalu jalankan aplikasi 
+Masuk ke environment dan ganti `DATABASE_URL` dengan koneksi database neon milik sendiri lalu jalankan server aplikasi websitenya...
 
 ```bash
 # start server nodejs
